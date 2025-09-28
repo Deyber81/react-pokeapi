@@ -4,11 +4,14 @@ import type { Pokemon, PokemonDetail } from "../types/pokemon";
 export const getPokemons = async (
   limit = 20,
   offset = 0
-): Promise<Pokemon[]> => {
+): Promise<{ results: Pokemon[]; total: number }> => {
   const { data } = await pokeApi.get(
     `/pokemon?limit=${limit}&offset=${offset}`
   );
-  return data.results;
+  return {
+    results: data.results,
+    total: data.count,
+  };
 };
 
 export const getPokemonDetails = async (
