@@ -27,3 +27,7 @@ export const getPokemonsByType = async (type: string): Promise<Pokemon[]> => {
   const { data } = await pokeApi.get(`/type/${type.toLowerCase()}`);
   return data.pokemon.map((p: { pokemon: Pokemon }) => p.pokemon);
 };
+export const searchPokemon = async (name: string): Promise<PokemonDetail> => {
+  const { data } = await pokeApi.get(`/pokemon/${name.toLowerCase()}`);
+  return data;
+};
