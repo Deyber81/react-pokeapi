@@ -22,36 +22,54 @@ const PokemonList = ({ limit = 12 }: Props) => {
     if (page > 1) setPage((p) => p - 1);
   };
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-600 text-lg animate-pulse">
+          Cargando pokemons...
+        </p>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-red-500 text-lg font-semibold">⚠ Error: {error}</p>
+      </div>
+    );
 
   return (
-    <div>
+    <div className="w-full max-w-6xl mx-auto px-4">
       {/* Grid de pokemons */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {pokemons.map((p) => (
-          <PokemonCard key={p.name} name={p.name} />
+          <div
+            key={p.name}
+            className="bg-white shadow-md rounded-2xl p-4 hover:shadow-xl hover:-translate-y-1 transition duration-300"
+          >
+            <PokemonCard name={p.name} />
+          </div>
         ))}
       </div>
 
       {/* Controles de paginación */}
-      <div className="flex justify-center items-center gap-4 mt-6">
+      <div className="flex justify-center items-center gap-4 mt-10">
         <button
           onClick={prevPage}
           disabled={page === 1}
-          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed transition"
         >
           ◀ Anterior
         </button>
 
-        <span>
-          Página {page} de {totalPages}
+        <span className="text-gray-700 font-medium">
+          Página <span className="font-bold">{page}</span> de {totalPages}
         </span>
 
         <button
           onClick={nextPage}
           disabled={page === totalPages}
-          className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
+          className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed transition"
         >
           Siguiente ▶
         </button>

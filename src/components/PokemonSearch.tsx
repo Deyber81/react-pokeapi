@@ -31,33 +31,54 @@ const PokemonSearch = ({ value, onInputChange, onSubmit, onClear }: Props) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
+    <div className="w-full max-w-3xl mx-auto px-4">
+      {/* Barra de búsqueda */}
+      <form onSubmit={handleSubmit} className="mb-6 flex gap-2 items-center">
         <input
           type="text"
-          placeholder="Buscar Pokémon..."
+          placeholder="🔍 Buscar Pokémon..."
           value={value}
           onChange={(e) => onInputChange(e.target.value)}
-          className="border px-2 py-1 rounded flex-1"
+          className="flex-1 px-4 py-2 rounded-lg border border-gray-300 shadow-sm 
+                     focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
           aria-label="Buscar Pokémon por nombre"
         />
-        <button className="bg-blue-500 text-white px-3 py-1 rounded">
+
+        <button
+          type="submit"
+          className="px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold 
+                     hover:bg-blue-600 transition disabled:opacity-50"
+          disabled={!value.trim()}
+        >
           Buscar
         </button>
+
         {value && (
           <button
             type="button"
             onClick={handleClear}
-            className="px-3 py-1 border rounded"
+            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 
+                       hover:bg-gray-100 transition"
           >
             Limpiar
           </button>
         )}
       </form>
 
-      {loading && <p>Cargando...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      {pokemon && <PokemonDetail pokemon={pokemon} />}
+      {/* Estados */}
+      {loading && (
+        <p className="text-center text-gray-500 animate-pulse">
+          Cargando resultados...
+        </p>
+      )}
+      {error && (
+        <p className="text-center text-red-600 font-semibold">⚠ {error}</p>
+      )}
+      {pokemon && (
+        <div className="mt-6">
+          <PokemonDetail pokemon={pokemon} />
+        </div>
+      )}
     </div>
   );
 };
