@@ -26,5 +26,11 @@ export const useSearchPokemon = () => {
     }
   };
 
-  return { pokemon, loading, error, search };
+  const clear = () => {
+    setPokemon(null);
+    setError(null);
+    setLoading(false);
+  };
+
+  return { pokemon, loading, error, search, clear };
 };

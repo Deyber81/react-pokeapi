@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useSearchPokemon } from "../hook/useSearchPokemon";
 import PokemonDetail from "./PokemonDetail";
 
-const PokemonSearch = () => {
-  const [query, setQuery] = useState("");
-  const { pokemon, loading, error, search } = useSearchPokemon();
+type Props = {
+  value: string;
+  onInputChange: (q: string) => void;
+  onSubmit?: (q: string) => void;
+  onClear?: () => void;
+};
+
+const PokemonSearch = ({ value, onInputChange, onSubmit, onClear }: Props) => {
+  const { pokemon, loading, error, search, clear } = useSearchPokemon();
+
+  useEffect(() => {
+    if (!value) clear();
+  }, [value, clear]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) search(query);
+    const q = value.trim();
+    if (!q) return;
+    onSubmit?.(q);
+    search(q);
+  };
+
+  const handleClear = () => {
+    onInputChange("");
+    onClear?.();
+    clear();
   };
 
   return (
@@ -17,13 +36,23 @@ const PokemonSearch = () => {
         <input
           type="text"
           placeholder="Buscar Pokémon..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={value}
+          onChange={(e) => onInputChange(e.target.value)}
           className="border px-2 py-1 rounded flex-1"
+          aria-label="Buscar Pokémon por nombre"
         />
         <button className="bg-blue-500 text-white px-3 py-1 rounded">
           Buscar
         </button>
+        {value && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="px-3 py-1 border rounded"
+          >
+            Limpiar
+          </button>
+        )}
       </form>
 
       {loading && <p>Cargando...</p>}
